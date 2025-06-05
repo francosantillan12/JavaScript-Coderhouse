@@ -1,5 +1,7 @@
 //******* MI CALCULADORA********** */
 
+let historial = []
+
 const pedirNumeros = () => {
   let numeroA = parseInt(prompt("Ingrese el primer número"))
   let numeroB = parseInt(prompt("Ingrese el segundo número"))
@@ -9,47 +11,69 @@ const pedirNumeros = () => {
 const sumar = (numeroA, numeroB) => {
   let resultado = numeroA + numeroB
   alert (numeroA + "+" + numeroB + "=" + resultado)
+  let operacion = numeroA + " + " + numeroB + " = " + resultado;
+  historial.push(operacion)
+  console.log("Tu historial es:" + operacion)
 }
 
 const restar = (numeroA, numeroB) => {
   let resultado = numeroA - numeroB
   alert (numeroA + "-" + numeroB + "=" + resultado)
+  let operacion = numeroA + " - " + numeroB + " = " + resultado;
+  historial.push(operacion)
 }
 
  const multiplicar = (numeroA, numeroB) => {
   let resultado = numeroA * numeroB
   alert (numeroA + "*" + numeroB + "=" + resultado)
+  let operacion = numeroA + " * " + numeroB + " = " + resultado;
+  historial.push(operacion)
  }
 
 const dividir = (numeroA, numeroB) => {
-  let resultado = numeroA / numeroB
-  alert (numeroA + "/" + numeroB + "=" + resultado)
+  if (numeroB === 0) {
+    alert("Error: No se puede dividir por cero");
+    return;
+  }
+  let resultado = numeroA / numeroB;
+  alert(numeroA + "/" + numeroB + "=" + resultado);
+  let operacion = numeroA + " / " + numeroB + " = " + resultado;
+  historial.push(operacion);
 }
 
 
 
-let menu = parseInt(prompt("elija una opcion: \n 1-sumar \n 2-restar \n 3-multiplicar \n 4-dividir \n 5- salir"))
+let menu = parseInt(prompt("elija una opcion: \n 1-sumar \n 2-restar \n 3-multiplicar \n 4-dividir \n 5-ver historial \n 6-salir"))
 
-while(menu !== 5) { //que el numero que se le cargue a "menu" tiene que ser distinto que 5, de esta manera salgo
-  let numeros = pedirNumeros()
-  switch(menu){
-  case 1: 
-    sumar(numeros[0], numeros[1])
-    break
-  case 2:
-    restar(numeros[0], numeros[1])
-    break
-  case 3:
-    multiplicar(numeros[0], numeros[1])
-    break
-  case 4:
-    dividir(numeros[0], numeros[1])
-    break
-  default:
-    alert("opcion incorrecta")
-}
 
- menu = parseInt(prompt("elija una opcion: \n 1-sumar \n 2-restar \n 3-multiplicar \n 4-dividir \n 5- salir"))
+while(menu !== 6) { //que el numero que se le cargue a "menu" tiene que ser distinto que 5, de esta manera salgo
+  if(menu >= 1 && menu <= 4) {
+    let numeros = pedirNumeros()
+    switch(menu){
+      case 1: 
+        sumar(numeros[0], numeros[1])
+        break
+      case 2: 
+        restar(numeros[0], numeros[1])
+        break
+      case 3: 
+        multiplicar(numeros[0], numeros[1])
+        break
+      case 4: 
+        dividir(numeros[0], numeros[1])
+        break
+    }
+  } else if(menu === 5) {
+    if(historial.length === 0) {
+      alert("Aún no hay operaciones en el historial")
+    } else {
+      alert("Historial:\n" + historial.join("\n"))
+    }
+  } else {
+    alert("Opción incorrecta")
+  }
+
+  menu = parseInt(prompt("elija una opcion: \n 1-sumar \n 2-restar \n 3-multiplicar \n 4-dividir \n 5-ver historial \n 6-salir"))
 }
 alert("gracias")
  
