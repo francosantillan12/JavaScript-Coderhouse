@@ -1,12 +1,33 @@
 //******* MI CALCULADORA********** */
 
 let historial = []
+let resultadoAnterior= null
 
-const pedirNumeros = () => {
-  let numeroA = parseInt(prompt("Ingrese el primer número"))
-  let numeroB = parseInt(prompt("Ingrese el segundo número"))
+// const pedirNumeros = () => {
+//   let numeroA = parseInt(prompt("Ingrese el primer número"))
+//   let numeroB = parseInt(prompt("Ingrese el segundo número"))
+//   return [numeroA, numeroB];
+// }
+
+const pedirNumerosConMemoria = () => {
+  let numeroA;
+
+  if (resultadoAnterior !== null) {
+    let usarAnterior = prompt("¿Querés usar el resultado anterior (" + resultadoAnterior + ") como primer número? (si/no)");
+    
+    if (usarAnterior.toLowerCase() === "si") {
+      numeroA = resultadoAnterior;
+    } else {
+      numeroA = parseInt(prompt("Ingrese el primer número"));
+    }
+  } else {
+    numeroA = parseInt(prompt("Ingrese el primer número"));
+  }
+
+  let numeroB = parseInt(prompt("Ingrese el segundo número"));
   return [numeroA, numeroB];
 }
+
 
 const sumar = (numeroA, numeroB) => {
   let resultado = numeroA + numeroB
@@ -14,6 +35,7 @@ const sumar = (numeroA, numeroB) => {
   let operacion = numeroA + " + " + numeroB + " = " + resultado;
   historial.push(operacion)
   console.log("Tu historial es:" + operacion)
+  resultadoAnterior = resultado
 }
 
 const restar = (numeroA, numeroB) => {
@@ -21,6 +43,7 @@ const restar = (numeroA, numeroB) => {
   alert (numeroA + "-" + numeroB + "=" + resultado)
   let operacion = numeroA + " - " + numeroB + " = " + resultado;
   historial.push(operacion)
+  resultadoAnterior = resultado
 }
 
  const multiplicar = (numeroA, numeroB) => {
@@ -28,6 +51,7 @@ const restar = (numeroA, numeroB) => {
   alert (numeroA + "*" + numeroB + "=" + resultado)
   let operacion = numeroA + " * " + numeroB + " = " + resultado;
   historial.push(operacion)
+  resultadoAnterior = resultado
  }
 
 const dividir = (numeroA, numeroB) => {
@@ -39,6 +63,7 @@ const dividir = (numeroA, numeroB) => {
   alert(numeroA + "/" + numeroB + "=" + resultado);
   let operacion = numeroA + " / " + numeroB + " = " + resultado;
   historial.push(operacion);
+  resultadoAnterior = resultado
 }
 
 
@@ -48,7 +73,7 @@ let menu = parseInt(prompt("elija una opcion: \n 1-sumar \n 2-restar \n 3-multip
 
 while(menu !== 6) { //que el numero que se le cargue a "menu" tiene que ser distinto que 5, de esta manera salgo
   if(menu >= 1 && menu <= 4) {
-    let numeros = pedirNumeros()
+    let numeros = pedirNumerosConMemoria()
     switch(menu){
       case 1: 
         sumar(numeros[0], numeros[1])

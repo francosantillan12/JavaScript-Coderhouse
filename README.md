@@ -9,12 +9,14 @@ La aplicación permite realizar operaciones básicas de una calculadora: suma, r
 
 - Solicita dos números al usuario mediante `prompt`.
 - Permite elegir entre 4 operaciones: sumar, restar, multiplicar o dividir.
-- Muestra los resultados usando `alert`.
+- Opción para que el usuario elija si quiere utilizar el resultado anterior como primer
+  numero y así poder seguir reutilizando los resultados.
+- Tambien se puede ver el "historial" de los calculos realizados.
+- Usé `alert` para mostrar los resultados.
 - Repite el menú hasta que el usuario elige salir.
 
 ## 📌 Tecnologías utilizadas
 
-- HTML (estructura base)
 - JavaScript (lógica principal)
 - Métodos de entrada y salida: `prompt`, `alert`
 
