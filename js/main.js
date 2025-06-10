@@ -103,6 +103,8 @@ while(menu !== 6) { //que el numero que se le cargue a "menu" tiene que ser dist
 alert("gracias")
  
 
+ 
+
 
 
 
@@ -408,5 +410,40 @@ saludar(nombre, edad, signo)
 
 //********************* */
 
+
+// nombreUsuario = prompt("Como es tu nombre?")
+
+
+// let juegos = [
+//   {nombre: "fifa2025", precio: 8000},
+//   {nombre: "CS GO", precio: 6500},
+//   {nombre: "Age Of Empires", precio: 5000},
+//   {nombre: "Worms", precio: 3700},
+// ]
+// console.log(
+//   nombreUsuario + ", estos son los juegos disponibles:\n" +
+//   "1. " + juegos[0].nombre + " - $" + juegos[0].precio + "\n" +
+//   "2. " + juegos[1].nombre + " - $" + juegos[1].precio + "\n" +
+//   "3. " + juegos[2].nombre + " - $" + juegos[2].precio + "\n" +
+//   "4. " + juegos[3].nombre + " - $" + juegos[3].precio
+// );
+
+
+// numeroDeJuego = parseInt(prompt("¿Que juego buscas?"))
+// if (numeroDeJuego === 1){
+//   console.log("fifa2025")
+// } else if (numeroDeJuego === 2){
+//   console.log("CS GO")
+// } else if(numeroDeJuego === 3){
+//   console.log("Age Of empires")
+// } else if(numeroDeJuego === 4){
+//   console.log("Worms")
+// }else {
+//   console.log("no elegiste una opcion valida")
+// }
+
+// for (inicio; condicion; paso){
+
+// }
 
 
