@@ -1,449 +1,512 @@
-//******* MI CALCULADORA********** */
 
-let historial = []
-let resultadoAnterior= null
+let app = document.getElementById("app");
+if (!app) {
+  const div = document.createElement("div");
+  div.id = "app";
+  document.body.appendChild(div);
+  app = div;
+}
 
-// const pedirNumeros = () => {
-//   let numeroA = parseInt(prompt("Ingrese el primer número"))
-//   let numeroB = parseInt(prompt("Ingrese el segundo número"))
-//   return [numeroA, numeroB];
-// }
+app.classList.add("calculadora");
 
-const pedirNumerosConMemoria = () => {
-  let numeroA;
+//****************  Construcción del layout (sin estilos inline) *******/
+app.innerHTML = `
+  <div class="display" id="display">0</div>
+  ${[
+    ['clear','00','%','÷'],
+    ['7','8','9','×'],
+    ['4','5','6','−'],
+    ['1','2','3','+'],
+    ['0','.','back','=']
+  ].map(fila => `
+    <div class="boton-fila">
+      ${fila.map(btn => `
+        <button
+          class="
+            ${btn === 'clear' ? 'clear' : ''}
+            ${btn === '=' ? 'equal' : ''}
+            ${btn === 'back' ? 'backspace' : ''}
+            ${['÷','×','−','+'].includes(btn) ? 'operation' : 'boton-numero'}
+            ${btn === '0' ? 'large' : ''}
+          "
+          data-btn="${btn}"
+        >${btn === 'back' ? '←' : btn}</button>
+      `).join('')}
+    </div>
+  `).join('')}
 
-  if (resultadoAnterior !== null) {
-    let usarAnterior = prompt("¿Querés usar el resultado anterior (" + resultadoAnterior + ") como primer número? (si/no)");
-    
-    if (usarAnterior.toLowerCase() === "si") {
-      numeroA = resultadoAnterior;
-    } else {
-      numeroA = parseInt(prompt("Ingrese el primer número"));
+  <h3 class="historial-titulo">Historial</h3>
+  <select id="filtro-operacion" class="filtro-operacion">
+    <option value="todas">Todas</option>
+    <option value="+">Suma (+)</option>
+    <option value="−">Resta (−)</option>
+    <option value="×">Multiplicación (×)</option>
+    <option value="÷">División (÷)</option>
+  </select>
+  <ul id="historial" class="historial-lista"></ul>
+  <button id="limpiar-historial" class="btn-limpiar-historial">Limpiar historial</button>
+`;
+
+// Variables y referencias
+const display = document.getElementById("display");
+let expr = "";
+
+// Recuperar historial y filtro guardados o crear nuevos
+let historial = JSON.parse(localStorage.getItem("historial")) || [];
+const filtroSelect = document.getElementById("filtro-operacion");
+const filtroGuardado = localStorage.getItem("filtroSeleccionado");
+if (filtroGuardado) filtroSelect.value = filtroGuardado;
+
+// Función para mostrar historial filtrado
+const renderHistorial = () => {
+  const ul = document.getElementById("historial");
+  ul.innerHTML = "";
+
+  const filtro = filtroSelect.value;
+
+  // Filtrar con filter()
+  const historialFiltrado = filtro === "todas"
+    ? historial
+    : historial.filter(op => op.expresion.includes(filtro));
+
+  historialFiltrado.forEach(op => {
+    const li = document.createElement("li");
+    li.textContent = `${op.expresion} = ${op.resultado}`;
+    ul.appendChild(li);
+  });
+};
+
+renderHistorial();
+
+// Manejo de botones de la calculadora
+app.addEventListener("click", e => {
+  const b = e.target.getAttribute("data-btn");
+  if (!b) return;
+
+  if (b === 'clear') {
+    expr = "";
+  } else if (b === 'back') {
+    expr = expr.slice(0, -1);
+  } else if (b === '=') {
+    try {
+      const resultado = eval(expr.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-'));
+      const operacion = {
+        expresion: expr,
+        resultado: resultado
+      };
+ const ultimaOperacion = historial[historial.length - 1];
+if (
+  !ultimaOperacion ||
+  ultimaOperacion.expresion !== operacion.expresion ||
+  ultimaOperacion.resultado !== operacion.resultado
+) {
+  historial.push(operacion);
+  localStorage.setItem("historial", JSON.stringify(historial));
+}
+
+      expr = resultado.toString();
+      renderHistorial();
+    } catch {
+      expr = "Error";
     }
-  } else {
-    numeroA = parseInt(prompt("Ingrese el primer número"));
-  }
-
-  let numeroB = parseInt(prompt("Ingrese el segundo número"));
-  return [numeroA, numeroB];
-}
-
-
-const sumar = (numeroA, numeroB) => {
-  let resultado = numeroA + numeroB
-  alert (numeroA + "+" + numeroB + "=" + resultado)
-  let operacion = numeroA + " + " + numeroB + " = " + resultado;
-  historial.push(operacion)
-  console.log("Tu historial es:" + operacion)
-  resultadoAnterior = resultado
-}
-
-const restar = (numeroA, numeroB) => {
-  let resultado = numeroA - numeroB
-  alert (numeroA + "-" + numeroB + "=" + resultado)
-  let operacion = numeroA + " - " + numeroB + " = " + resultado;
-  historial.push(operacion)
-  resultadoAnterior = resultado
-}
-
- const multiplicar = (numeroA, numeroB) => {
-  let resultado = numeroA * numeroB
-  alert (numeroA + "*" + numeroB + "=" + resultado)
-  let operacion = numeroA + " * " + numeroB + " = " + resultado;
-  historial.push(operacion)
-  resultadoAnterior = resultado
- }
-
-const dividir = (numeroA, numeroB) => {
-  if (numeroB === 0) {
-    alert("Error: No se puede dividir por cero");
+  
+} else {
+  const operadores = ['+', '−', '×', '÷', '%'];
+  if (expr === "" && operadores.includes(b)) {
     return;
   }
-  let resultado = numeroA / numeroB;
-  alert(numeroA + "/" + numeroB + "=" + resultado);
-  let operacion = numeroA + " / " + numeroB + " = " + resultado;
-  historial.push(operacion);
-  resultadoAnterior = resultado
-}
-
-
-
-let menu = parseInt(prompt("elija una opcion: \n 1-sumar \n 2-restar \n 3-multiplicar \n 4-dividir \n 5-ver historial \n 6-salir"))
-
-
-while(menu !== 6) { //que el numero que se le cargue a "menu" tiene que ser distinto que 5, de esta manera salgo
-  if(menu >= 1 && menu <= 4) {
-    let numeros = pedirNumerosConMemoria()
-    switch(menu){
-      case 1: 
-        sumar(numeros[0], numeros[1])
-        break
-      case 2: 
-        restar(numeros[0], numeros[1])
-        break
-      case 3: 
-        multiplicar(numeros[0], numeros[1])
-        break
-      case 4: 
-        dividir(numeros[0], numeros[1])
-        break
+  
+  // Controlar punto decimal
+  if (b === '.') {
+    // Encontrar la última posición de cualquier operador
+  let lastOpIndex = -1;
+    operadores.slice(0,4).forEach(op => {
+      const idx = expr.lastIndexOf(op);
+      if (idx > lastOpIndex) lastOpIndex = idx;
+    });
+    // Tomar el substring desde la posición después del último operador
+    const ultimoNumero = expr.substring(lastOpIndex + 1);
+    // Si ya tiene un punto, no agregar otro
+    if (ultimoNumero.includes('.')) {
+      return;
     }
-  } else if(menu === 5) {
-    if(historial.length === 0) {
-      alert("Aún no hay operaciones en el historial")
-    } else {
-      alert("Historial:\n" + historial.join("\n"))
-    }
-  } else {
-    alert("Opción incorrecta")
   }
 
-  menu = parseInt(prompt("elija una opcion: \n 1-sumar \n 2-restar \n 3-multiplicar \n 4-dividir \n 5-ver historial \n 6-salir"))
+  expr += b === '%' ? '/100' : b;
 }
-alert("gracias")
+
+  display.innerText = expr || "0";
+});
+
+//***********  Escuchar cambio en filtro y guardarlo en localStorage *********/
+filtroSelect.addEventListener("change", () => {
+  localStorage.setItem("filtroSeleccionado", filtroSelect.value);
+  renderHistorial();
+});
+
+// ************************Botón para limpiar historial************/
+document.getElementById("limpiar-historial").addEventListener("click", () => {
+  localStorage.removeItem("historial");
+  historial = [];
+  renderHistorial();
+});
+
+//*********EVENTO DE TECLADO */
+document.addEventListener("keydown", (event) => {
+  const tecla = event.key;
+
+  //*********  Mapeo de teclas del teclado a botones de la calculadora*/
+  const teclasValidas = ['0','1','2','3','4','5','6','7','8','9','.','+','-','*','/','%','Enter','Backspace','Delete'];
+
+  if (!teclasValidas.includes(tecla)) return;
+
+  // Mapeo de teclas a símbolos visuales de la calculadora
+  const mapaTeclas = {
+    '+': '+',
+    '-': '−',
+    '*': '×',
+    '/': '÷',
+    'Enter': '=',
+    'Backspace': 'back',
+    'Delete': 'clear'
+  };
+
+  const btnCalculadora = mapaTeclas[tecla] || tecla;
+
+  const boton = document.querySelector(`[data-btn="${btnCalculadora}"]`);
+  if (boton) {
+    boton.click(); // Simula clic
+  }
+});
+
+
+
+
+//******* MI CALCULADORA N1********** */
+
+// let historial = []
+// let resultadoAnterior= null
+
+// // const pedirNumeros = () => {
+// //   let numeroA = parseInt(prompt("Ingrese el primer número"))
+// //   let numeroB = parseInt(prompt("Ingrese el segundo número"))
+// //   return [numeroA, numeroB];
+// // }
+
+// const pedirNumerosConMemoria = () => {
+//   let numeroA;
+
+//   if (resultadoAnterior !== null) {
+//     let usarAnterior = prompt("¿Querés usar el resultado anterior (" + resultadoAnterior + ") como primer número? (si/no)");
+    
+//     if (usarAnterior.toLowerCase() === "si") {
+//       numeroA = resultadoAnterior;
+//     } else {
+//       numeroA = parseInt(prompt("Ingrese el primer número"));
+//     }
+//   } else {
+//     numeroA = parseInt(prompt("Ingrese el primer número"));
+//   }
+
+//   let numeroB = parseInt(prompt("Ingrese el segundo número"));
+//   return [numeroA, numeroB];
+// }
  
-
- 
-
-
-
-
-
-
-
-
-
-
-// function sumar (){
-//   let numeroA = parseInt(prompt("ingrese el primer numero"))
-//   let numeroB = parseInt(prompt("ingrese el segundo numero"))
+// const sumar = (numeroA, numeroB) => {
 //   let resultado = numeroA + numeroB
-//   alert(numeroA + "+" + numeroB + "=" + resultado )
+//   alert (numeroA + "+" + numeroB + "=" + resultado)
+//   let operacion = numeroA + " + " + numeroB + " = " + resultado;
+//   historial.push(operacion)
+//   console.log("Tu historial es:" + operacion)
+//   resultadoAnterior = resultado
 // }
 
-//  function restar (){
-//    let numeroA = parseInt(prompt("ingrese el primer numero"))
-//    let numeroB = parseInt(prompt("ingrese el segundo numero"))
-//    let resultado = numeroA - numeroB
-//    alert(numeroA + "-" + numeroB + "=" + resultado )
+// const restar = (numeroA, numeroB) => {
+//   let resultado = numeroA - numeroB
+//   alert (numeroA + "-" + numeroB + "=" + resultado)
+//   let operacion = numeroA + " - " + numeroB + " = " + resultado;
+//   historial.push(operacion)
+//   resultadoAnterior = resultado
 // }
 
-// function multiplicar (){
-//   let numeroA = parseInt(prompt("ingrese el primer numero"))
-//   let numeroB = parseInt(prompt("ingrese el segundo numero"))
+//  const multiplicar = (numeroA, numeroB) => {
 //   let resultado = numeroA * numeroB
-//   alert(numeroA + "x" + numeroB + "=" + resultado )
+//   alert (numeroA + "*" + numeroB + "=" + resultado)
+//   let operacion = numeroA + " * " + numeroB + " = " + resultado;
+//   historial.push(operacion)
+//   resultadoAnterior = resultado
+//  }
+
+// const dividir = (numeroA, numeroB) => {
+//   if (numeroB === 0) {
+//     alert("Error: No se puede dividir por cero");
+//     return;
+//   }
+//   let resultado = numeroA / numeroB;
+//   alert(numeroA + "/" + numeroB + "=" + resultado);
+//   let operacion = numeroA + " / " + numeroB + " = " + resultado;
+//   historial.push(operacion);
+//   resultadoAnterior = resultado
 // }
 
 
-// function dividir (){
-//   let numeroA = parseInt(prompt("ingrese el primer numero"))
-//   let numeroB = parseInt(prompt("ingrese el segundo numero"))
-//   let resultado = numeroA / numeroB
-//   alert(numeroA + " / " + numeroB + "=" + resultado )
+
+// let menu = parseInt(prompt("elija una opcion: \n 1-sumar \n 2-restar \n 3-multiplicar \n 4-dividir \n 5-ver historial \n 6-salir"))
+
+
+// while(menu !== 6) { //que el numero que se le cargue a "menu" tiene que ser distinto que 6, de esta manera salgo
+//   if(menu >= 1 && menu <= 4) {
+//     let numeros = pedirNumerosConMemoria()
+//     switch(menu){
+//       case 1: 
+//         sumar(numeros[0], numeros[1])
+//         break
+//       case 2: 
+//         restar(numeros[0], numeros[1])
+//         break
+//       case 3: 
+//         multiplicar(numeros[0], numeros[1])
+//         break
+//       case 4: 
+//         dividir(numeros[0], numeros[1])
+//         break
+//     }
+//   } else if(menu === 5) {
+//     if(historial.length === 0) {
+//       alert("Aún no hay operaciones en el historial")
+//     } else {
+//       alert("Historial:\n" + historial.join("\n"))
+//     }
+//   } else {
+//     alert("Opción incorrecta")
+//   }
+
+//   menu = parseInt(prompt("elija una opcion: \n 1-sumar \n 2-restar \n 3-multiplicar \n 4-dividir \n 5-ver historial \n 6-salir"))
 // }
-
-// Función para pedir los dos números
-
+// alert("gracias")
 
 
-
-
-
-//let  curso = " JavaScript-flex" 
-/* De esta manera cree la valiable "curso" de tipo "sting" y 
-            le asigné el nombre "javascript-flex"*/
+//**************************************************************** */
 
 
 
 
-//let comision = 90600 
-/* Creé la variable "comision" de tipo "numerica" y le asigné un valor */
 
 
 
-//let tutor = false 
-/* Creé la variable "tutor" de tipo "booblean" y
- le asigné que sea "falso"  */ 
 
 
-//let plataforma = "CoderHouse"
-
-//console.log("Plataforma: "+plataforma)
-
-//const academia = "CoderHouse"
-//ACÁ CREE UNA "CONSTANTE" CON EL NOMBRE "CODERHOUSE" 
 
 
-//let curso = prompt ("Ingrese la materia")
-//let comision = prompt ("Ingrese el numero de comision") 
 
 
+
+//************************************************************ */
  
-//console.log("Materia: "+curso+" Comision N "+comision+ "Academia:"+academia)
-//console.log ("Comision N"+ comision)
 
-//con "parseInt" todo lo que escribamos se transforma en tipo numerico
-// let numeroA = parseInt(prompt("ingrese el primer numero")) 
- //let numeroB = parseInt(prompt("ingrese el segundo numero"))
+//******VETERINARIA LISTA PACIENTES XD*****/
 
+// class Mascota{
+//   static id = 0
+//   constructor (nombre,tipo,edad){
+//     this.id = ++Mascota.id //Aumentame en uno previamente lo que esté en la propiedad id de la clase Mascota
+//     this.nombre = nombre,
+//     this.tipo = tipo,
+//     this.edad = edad
+//   }
+ 
+// } 
 
- //let resultado = numeroA + numeroB 
- //console.log(resultado)
+// const mascotas = []
 
+// const cargaMascotas = () =>{
+//   let cargaNombre = prompt("Ingrese el nombre de la mascota")
+//   let cargaTipo = prompt("Ingrese el tipo de mascota")
+//   let cargaEdad = parseInt(prompt("Ingrese la edad de su mascota"))
 
+//   const mascota = new Mascota(cargaNombre, cargaTipo, cargaEdad)
+//   mascotas.push(mascota) // "push" metodo para mandar cosas al array
+// }
 
+// //FUNCION QUE SE ENCARGA DE VER LAS MASCOTAS
+// //Le digo al usuario que si no hay nada dentro del array muestre un alert 
+// const verMascotas = () => {
+//  if (mascotas.length === 0){ //.lenght nos dice cuantos elementos hay dentro del array
+//   alert("No se cargaron mascotas aun")
+//  } else{ //for..of nos permite recorrer el array
+//     for(const mascota of mascotas){
+//       console.log(mascota)
+//     }
+//  }
+// }
 
- //let edad = 20
- //let acceso = (edad => 18) && (edad <= 30)
- //console.log (acceso)
+// let menu = parseInt(prompt("Elija 1 para ver la lista de mascotas, 2 para cargar una mascota, 3 para salir"))
 
- //let temperatura = 91
- //let encender = (temperatura >= 80) && (temperatura <=93)
- //console.log (encender)
-
- //let edad = 20;
- //let dinero = false
-
- //if(edad >= 21 || dinero) {
-   // console.log("ingresá")
- //} else {
- //   console.log("no podes ingresar bro")
- //} 
-
-
-//AND (&&) = se tienen que cumplir ambas condiciones para que el resultado sea true.
-
-//OR (||) = se tiene que cumplir al menos una de las condiciones
-
-
-
-
-/*
-let edad = null;
-let nombre = "Carlos";
-
-if (edad !== null && edad !== undefined) {
-  console.log(`Tienes ${edad} años`);
-} else {
-  if (nombre) {
-    console.log(`Bienvenido, ${nombre}`);
-  } else {
-    console.log("Información incompleta");
-  }
-}
-  
-En este ejemplo:
-
-Paso 1: Verificamos si edad tiene un valor válido.
-
-Paso 2: Si no, evaluamos si nombre está definido.
-
-Paso 3: Dependiendo de las condiciones, mostramos el mensaje correspondiente.
-
-*/
-
-//USUARIOS
-//const usuarios =  [
-  //  {nombre: "Ana", edad: 20, aceptoTerminos: false},
-    //{nombre: "Luis", edad:18,  aceptoTerminos: true},
-    //{nombre: "Carlos", edad: 18, aceptoTerminos: true},
-   // {nombre: "Maria", edad: 20, aceptoTerminos: true}
-//]
-
-//for (let i = 0; i < usuarios.length; i++){ // propiedad (.length) "le decis, va a iterar siempre que I sea menor a la cantidad de elementos que tiene el array de usuarios
-//    if(usuarios[i].edad >=18 && usuarios[i].aceptoTerminos){
-//        console.log(usuarios[i].nombre)
-//    }
-//} 
-
-// VALIDADOR DE ACCESO
-
-
-//let = color = prompt("color del semaforo (rojo, amarillo, verde)")
-
-
-
-//if (color === "rojo"){
- // console.log("ALTO!")
-//} else if (color === ("amarillo"){
-//  console.log ("ATENCION!")
-//} else (color === "verde"){
-//  console.log("avance")
-//}
-
-
-
-//*********QUIZ DE TRES PREGUNTAS**************** */
-/*let jugarOtraVez = prompt ("¿Estas listo para este quiz de 3 preguntas? si/no").toLowerCase().trim();
-
-while (jugarOtraVez === "si"){
-
-let puntaje = 0
-let respuestaUsuario = prompt ("¿Quien salió campeón del mundo en el mundial de qatar 2022?\na) Alemania\nb) Francia\nc) Argentina");
-let respuestaUsuario2 = prompt ("¿Quien metió 3 goles en la final del mundo en qatar 2022?\na) Mercado \nb) Mbappe \nc) Messi ");
-let respuestaUsuario3 = prompt ("¿Quien patió el ultimo penal en la final en el mundial de qatar 2022? \na) Montiel \nb) Messi \nc) Tragliafico");
-
-  
-  if (respuestaUsuario === "c"){
-  puntaje++
-  console.log("Correcto, sumaste 1 punto!")
-} else  {
-  console.log ("Incorrecto")
-}
-
-
-if (respuestaUsuario2 === "b"){
-  puntaje++
-  console.log("Correcto, sumaste 1 punto")
-} else {
-  console.log ("Incorrecto, no sumaste puntos")
-}
-
-
-if (respuestaUsuario3 === "a"){
-  puntaje++
-  console.log("Correcto! sumaste 1 punto")
-}else {
-  console.log ("Incorrecto, no sumaste nada")
-}
-
-
-alert("Terminaste el quiz. Acertaste " + puntaje + " de 3 preguntas")
-jugarOtraVez = prompt ("¿Querés seguír jugando? si/no").toLowerCase().trim();
-}
-*/
-
-/*function saludar(nombre){
-  console.log("hola" + nombre + "!");
-}*/
-
-
-
-
-/*function numero (numeroPar){
-  if (numeroPar % 2 == 0){
-    console.log("es par")
-  }else{
-    console.log("es impar")
-  }
-}
-
-let  entrada = prompt("ingrese un numero");
-let numeroUsuario = Number(entrada);
-numero(numeroUsuario); */
-
-
-/*function edad (edad){
-  if (edad >= 18){
-  console.log("podes votar")
-  }else{
-  console.log("no podes votar")
-}
-}
-edad(21)//consola devuelte "podes votar"*/
-
-/*function valorDeLibros(preciodelibro){
-  const alquilerPorDia = 10
-  return preciodelibro + alquilerPorDia
-}
-let libro = valorDeLibros(10)
-let dias = alquilerPorDia + valorDeLibros
-
-console.log(`el valor del libro es: $${libro}`)
-*/
-
-
-//let nombre = prompt("Decime tu nombre") 
-//let edad = parseInt(prompt("Decime tu edad"))
-/*let signo = prompt("¿Que signo sos?")
-
-function saludar(nombre, edad, signo) {
-  console.log("Hola " + nombre)
-  console.log("Tu edad es " + edad)
-  console.log("tu signo es " + signo)
-
-  if (isNaN(edad)) {
-    console.log("La edad ingresada no es válida.")
-  } else if (edad >= 18) {
-    console.log("Sos mayor de edad.")
-  } else {
-    console.log("Sos menor de edad.")
-  } if (signo === "picis"){
-    console.log("sos picis!!!,como justin")
-  }else {
-    console.log("No sos como justin")
-  }
-}
-
-saludar(nombre, edad, signo)
-*/
-
-// let edadIngresada = parseInt(prompt("¿cuantos años tenes?"))
-// function verificarEdad (){
-//   let mayorDeEdad = edad >= 18
-//   alert ()
+// while(menu !== 3){
+//   switch(menu){
+//     case 1:
+//       verMascotas()
+//       break
+//     case 2:
+//       cargaMascotas()
+//       break
+//     default:
+//       alert("Opcion incorrecta") 
+//   }
+//   menu = parseInt(prompt("Elija 1 para ver el catalogo, 2 para cargar una mascota, 3 para salir"))
 // }
 
 
 
-
-// SUMA 
-//let primerNumero = parseInt(prompt("ingrese el primer numero"))
-//let segundoNumero = parseInt(prompt("ingrese el segundo numero"))
-
-//function sumar (numeroA, numeroB){
-//  let resultado = numeroA + numeroB
-//  return resultado
-//}
-
-//console.log(sumar(primerNumero, segundoNumero))
-//***************HASTA ACÁ********* */
-
-//********* SUMA CON FUNCION FLECHA!!**** 
-
-//const calculadoraDel10 = primerNumero => primerNumero*10
-//  console.log (calculadoreaDel10(10))
-
-
-
-
-//********************* */
-
-
-// nombreUsuario = prompt("Como es tu nombre?")
-
-
-// let juegos = [
-//   {nombre: "fifa2025", precio: 8000},
-//   {nombre: "CS GO", precio: 6500},
-//   {nombre: "Age Of Empires", precio: 5000},
-//   {nombre: "Worms", precio: 3700},
+// const productos = [
+//   {
+//     id: 1,
+//     nombre:"Alimento para perro 10kg",
+//     precio:15000,
+//     categoria: "Alimento",
+//   },
+//   {
+//     id: 2,
+//     nombre:"Alimento para gato 3kg",
+//     precio:9000,
+//     categoria: "Alimento",
+//   },
+//   {
+//     id: 3,
+//     nombre:"Collar antipulgas",
+//     precio:5000,
+//     categoria: "Medicamento",
+//   },
+//   {
+//     id: 4,
+//     nombre:"Vacuna antirrábica",
+//     precio:12000,
+//     categoria: "Medicamento",
+//   },
+//   {
+//     id: 5,
+//     nombre:"Rascador para gato",
+//     precio:8000,
+//     categoria: "Juguete",
+//   },
+//   {
+//     id: 6,
+//     nombre:"Juguete mordillo para perro",
+//     precio:3500,
+//     categoria: "Juguete",
+//   },
+//   {
+//     id: 7,
+//     nombre:"Shamppo neutro para perros",
+//     precio:4000,
+//     categoria: "Higiene",
+//   },
+//   {
+//     id: 8,
+//     nombre:"Shamppo neutro para gatos",
+//     precio:3750,
+//     categoria: "Higiene",
+//   } 
 // ]
-// console.log(
-//   nombreUsuario + ", estos son los juegos disponibles:\n" +
-//   "1. " + juegos[0].nombre + " - $" + juegos[0].precio + "\n" +
-//   "2. " + juegos[1].nombre + " - $" + juegos[1].precio + "\n" +
-//   "3. " + juegos[2].nombre + " - $" + juegos[2].precio + "\n" +
-//   "4. " + juegos[3].nombre + " - $" + juegos[3].precio
-// );
 
 
-// numeroDeJuego = parseInt(prompt("¿Que juego buscas?"))
-// if (numeroDeJuego === 1){
-//   console.log("fifa2025")
-// } else if (numeroDeJuego === 2){
-//   console.log("CS GO")
-// } else if(numeroDeJuego === 3){
-//   console.log("Age Of empires")
-// } else if(numeroDeJuego === 4){
-//   console.log("Worms")
-// }else {
-//   console.log("no elegiste una opcion valida")
+
+
+// //** "forEach()"ME MUESTRA EL ARRAY CON MIS PRODUCTOS
+
+// // const verProductos = productos.forEach((producto) => {
+// //   console.log(producto)
+// // })
+
+
+// //** */ "find()" ME MUESTRA EL PRODUCTO QUE YO ESTÉ BUSCANDO(SE USA SOLAMENTE PARA RESULTADOS QUE SEAN UNICOS(MATRICULAS,DNI, NUM DE SOCIO, PATENTE DE AUTO, ID ETC))
+// // let idProducto = parseInt(prompt("ingrese el ID del producto que está buscando"))
+// // const busqueda = productos.find(producto => producto.id === idProducto)
+// //  console.log(busqueda)
+
+
+// // ** "filter()" filtra PRODUCTOS POR MONTO/CATEGORIA
+// const filtrados = productos.filter((producto) => producto.precio <= 15000) // mostrame precios menor o igual a 15000
+//   console.log(filtrados)
+
+// //Mostrar productos segun la categoria elegida por el usuario
+
+// let opcion = parseInt(prompt(
+//   "¿Qué estás buscando?\n" +
+//   "1 - Alimento\n" +
+//   "2 - Medicamento\n" +
+//   "3 - Juguete\n" +
+//   "4 - Higiene\n" +
+//   "5 - Salir"
+// ));
+
+
+// while (opcion !== 5) {
+//   let categoria = "";
+
+//   switch (opcion) {
+//     case 1:
+//       categoria = "Alimento";
+//       break;
+//     case 2:
+//       categoria = "Medicamento";
+//       break;
+//     case 3:
+//       categoria = "Juguete";
+//       break;
+//     case 4:
+//       categoria = "Higiene";
+//       break;
+//     default:
+//       alert("Opción incorrecta");
+//       break;
+//   }
+
+//   if (categoria) {
+//     const filtrados = productos.filter(producto => producto.categoria === categoria);
+    
+//     if (filtrados.length > 0) {
+//       let mensaje = ` Productos en la categoría ${categoria}:\n\n`;
+//       for (const p of filtrados) {
+//         mensaje += ` ${p.nombre} - $${p.precio}\n`;
+//       }
+//       alert(mensaje);
+//     } else {
+//       alert(`No hay productos en la categoría ${categoria}.`);
+//     }
+//   }
+
+//   opcion = parseInt(prompt(
+//     "¿Qué estás buscando?\n" +
+//     "1 - Alimento\n" +
+//     "2 - Medicamento\n" +
+//     "3 - Juguete\n" +
+//     "4 - Higiene\n" +
+//     "5 - Salir"
+//   ));
 // }
 
-// for (inicio; condicion; paso){
 
+// // **"some()" nos sirve para saber si tenemos algo en stock
+// let buscar = prompt("ingrese el nombre del producto a ver si está en stock")
+// let hayStock = productos.some((producto) => producto.nombre == buscar)
+// if(hayStock){
+//   console.log("lo tenemos")
+// }else{
+//   console.log("No está disponible actualmente")
 // }
+
+//** */ "MAP()" CREA UNA COPIA DEL ARRAY (UN DUPLICADO), SIRVE PARA CUANDO POR EJ TENEMOS QUE HACER UN DESCUENTO POR UN TIEMPO DETERMINADO
+// 
+//** "reduce()" SIRVE PARA CUANDO NECESITAMOS USAR UN TOTAL, REDUCE TODOS LOS VALORES NUMERICOS QUE LE DEMOS A UNA UNICA EXPRESION*/
+
+// const total = productos.reduce((contador,producto) => contador + producto.precio, 0) 
+// console.log(total)
+
+
+
+
+
+//************************************************* */
 
 
