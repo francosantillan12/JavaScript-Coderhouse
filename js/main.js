@@ -1,3 +1,4 @@
+//***************MI CALCULADORA ENTREGA N2 JS CODERHOUSE***************/
 
 let app = document.getElementById("app");
 if (!app) {
@@ -124,9 +125,9 @@ if (
       const idx = expr.lastIndexOf(op);
       if (idx > lastOpIndex) lastOpIndex = idx;
     });
-    // Tomar el substring desde la posición después del último operador
+    // ****Tomar el substring desde la posición después del último operador********
     const ultimoNumero = expr.substring(lastOpIndex + 1);
-    // Si ya tiene un punto, no agregar otro
+    // ************Si ya tiene un punto, no agregar otro**********************
     if (ultimoNumero.includes('.')) {
       return;
     }
@@ -138,7 +139,7 @@ if (
   display.innerText = expr || "0";
 });
 
-//***********  Escuchar cambio en filtro y guardarlo en localStorage *********/
+//***********  cambio en filtro y guardarlo en localStorage *********/
 filtroSelect.addEventListener("change", () => {
   localStorage.setItem("filtroSeleccionado", filtroSelect.value);
   renderHistorial();
@@ -151,7 +152,7 @@ document.getElementById("limpiar-historial").addEventListener("click", () => {
   renderHistorial();
 });
 
-//*********EVENTO DE TECLADO */
+//*********EVENTO DE TECLADO********** */
 document.addEventListener("keydown", (event) => {
   const tecla = event.key;
 
@@ -181,8 +182,8 @@ document.addEventListener("keydown", (event) => {
 
 
 
-
-//******* MI CALCULADORA N1********** */
+//********************************************************************************* */
+//***************MI CALCULADORA ENTREGA N1***************/
 
 // let historial = []
 // let resultadoAnterior= null
@@ -287,18 +288,6 @@ document.addEventListener("keydown", (event) => {
 
 
 //**************************************************************** */
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //************************************************************ */
