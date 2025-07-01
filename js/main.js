@@ -48,24 +48,24 @@ app.innerHTML = `
   <button id="limpiar-historial" class="btn-limpiar-historial">Limpiar historial</button>
 `;
 
-// Variables y referencias
+
 const display = document.getElementById("display");
 let expr = "";
 
-// Recuperar historial y filtro guardados o crear nuevos
+//********* Recuperar historial y filtro guardados*****************/
 let historial = JSON.parse(localStorage.getItem("historial")) || [];
 const filtroSelect = document.getElementById("filtro-operacion");
 const filtroGuardado = localStorage.getItem("filtroSeleccionado");
 if (filtroGuardado) filtroSelect.value = filtroGuardado;
 
-// Función para mostrar historial filtrado
+// *********** para mostrar historial filtrado******************/
 const renderHistorial = () => {
   const ul = document.getElementById("historial");
   ul.innerHTML = "";
 
   const filtro = filtroSelect.value;
 
-  // Filtrar con filter()
+  // *******Filtrar****************/ 
   const historialFiltrado = filtro === "todas"
     ? historial
     : historial.filter(op => op.expresion.includes(filtro));
@@ -79,7 +79,7 @@ const renderHistorial = () => {
 
 renderHistorial();
 
-// Manejo de botones de la calculadora
+// *********************Manejo de botones de la calculadora********************/
 app.addEventListener("click", e => {
   const b = e.target.getAttribute("data-btn");
   if (!b) return;
@@ -117,9 +117,9 @@ if (
     return;
   }
   
-  // Controlar punto decimal
+  //************* Controlar punto decimal ***************/
   if (b === '.') {
-    // Encontrar la última posición de cualquier operador
+    // ***************Encontrar la última posición de cualquier operador******/
   let lastOpIndex = -1;
     operadores.slice(0,4).forEach(op => {
       const idx = expr.lastIndexOf(op);
