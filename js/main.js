@@ -10,7 +10,7 @@ if (!app) {
 
 app.classList.add("calculadora");
 
-//****************  Construcción del layout (sin estilos inline) *******/
+//****************  Construcción del layout*******/
 app.innerHTML = `
   <div class="display" id="display">0</div>
   ${[
@@ -56,7 +56,9 @@ let expr = "";
 let historial = JSON.parse(localStorage.getItem("historial")) || [];
 const filtroSelect = document.getElementById("filtro-operacion");
 const filtroGuardado = localStorage.getItem("filtroSeleccionado");
-if (filtroGuardado) filtroSelect.value = filtroGuardado;
+if (filtroGuardado) {
+  filtroSelect.value = filtroGuardado;
+}
 
 // *********** para mostrar historial filtrado******************/
 const renderHistorial = () => {
@@ -65,10 +67,15 @@ const renderHistorial = () => {
 
   const filtro = filtroSelect.value;
 
-  // *******Filtrar****************/ 
-  const historialFiltrado = filtro === "todas"
-    ? historial
-    : historial.filter(op => op.expresion.includes(filtro));
+//**** para filtrar el historial****** */
+ let historialFiltrado;
+
+if (filtro === "todas") {
+  historialFiltrado = historial;
+} else {
+  historialFiltrado = historial.filter(op => op.expresion.includes(filtro));
+}
+
 
   historialFiltrado.forEach(op => {
     const li = document.createElement("li");
@@ -82,7 +89,9 @@ renderHistorial();
 // *********************Manejo de botones de la calculadora********************/
 app.addEventListener("click", e => {
   const b = e.target.getAttribute("data-btn");
-  if (!b) return;
+  if (!b) {
+    return;
+  }
 
   if (b === 'clear') {
     expr = "";
@@ -117,15 +126,15 @@ if (
     return;
   }
   
-  //************* Controlar punto decimal ***************/
+  //************* Controlar punto decimal (AYUDA CHATGTP) ***************/
   if (b === '.') {
-    // ***************Encontrar la última posición de cualquier operador******/
+    // Encontrar la última posición de cualquier operador
   let lastOpIndex = -1;
     operadores.slice(0,4).forEach(op => {
       const idx = expr.lastIndexOf(op);
       if (idx > lastOpIndex) lastOpIndex = idx;
     });
-    // ****Tomar el substring desde la posición después del último operador********
+    //Tomar el substring desde la posición después del último operador
     const ultimoNumero = expr.substring(lastOpIndex + 1);
     // ************Si ya tiene un punto, no agregar otro**********************
     if (ultimoNumero.includes('.')) {
@@ -138,6 +147,8 @@ if (
 
   display.innerText = expr || "0";
 });
+//******************************/
+
 
 //***********  cambio en filtro y guardarlo en localStorage *********/
 filtroSelect.addEventListener("change", () => {
@@ -159,7 +170,9 @@ document.addEventListener("keydown", (event) => {
   //*********  Mapeo de teclas del teclado a botones de la calculadora*/
   const teclasValidas = ['0','1','2','3','4','5','6','7','8','9','.','+','-','*','/','%','Enter','Backspace','Delete'];
 
-  if (!teclasValidas.includes(tecla)) return;
+if (!teclasValidas.includes(tecla)) {
+  return;
+}
 
   // Mapeo de teclas a símbolos visuales de la calculadora
   const mapaTeclas = {

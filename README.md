@@ -12,7 +12,7 @@ La aplicación permite realizar operaciones básicas de una calculadora: suma, r
 
 - Historial de cálculos con filtro por tipo de operación.
 
-- Botón para borrar el último dígito ingresado (backspace).
+- Botón para borrar el último dígito ingresado.
 
 - Persistencia del historial y filtro usando localStorage.
 
