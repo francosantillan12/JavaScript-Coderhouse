@@ -1,174 +1,155 @@
 
+/**************** SECCION "TURNOS" *******************************/
 body {
-  font-family: Arial, sans-serif;
-  background-color: #929191; 
-  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #b8b6b6;
+  color: #333333;
   padding: 20px;
-  color: black;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.navbar ul{
+  display: flex;
+  gap: 5rem;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+  justify-content: center;
+
 }
 
-.contenedor {
+.logo img{
+  width: 100px;
+}
+
+.imagen-portada{
+   display: flex;
+   justify-content: center;
+   margin-top: 3rem;
+}
+
+.imagen-portada img{
+  width: 500px;
+}
+
+h1{
+  text-align: center;
+}
+
+h2{
+  text-align: center;
+}
+
+.texto-portada{
+  text-align: center;
+}
+
+#formularioTurno {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
- 
+  gap: 15px;
 }
 
-.titulo {
-  text-align: center;
-  margin: 20px 0;
-  font-size: 2rem;
-  color: black; /* título en negro */
-  font-weight: bold;
-
- 
+#formularioTurno input {
+  padding: 10px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s;
 }
 
-.calculadora {
-  background: #000000;
-  border-radius: 40px;
-  padding: 20px;
-  width: 360px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-  margin-top: 40px;
+#formularioTurno input:focus {
+  border-color: #2a9d8f;
+  outline: none;
 }
 
-.display {
-  background: #333;
-  color: #fff;
-  text-align: right;
-  padding: 15px 20px;
-  font-size: 2.5rem;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  height: 80px;
-  box-sizing: border-box;
-  overflow-x: auto;
-  user-select: none;
+#formularioTurno button {
+  padding: 12px;
+  background-color: #2a9d8f;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.boton-fila {
+#formularioTurno button:hover {
+  background-color: #21867a;
+}
+
+
+#turnosContainer {
+  list-style: none;
+  padding: 0;
+}
+
+#turnosContainer li {
+  background: #ffffff;
+  padding: 12px 18px;
+  margin-bottom: 12px;
+  border-left: 5px solid #2a9d8f;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  font-size: 16px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  align-items: center;
 }
 
-.boton-fila:last-child {
-  margin-bottom: 0;
-}
-
-button {
-  width: 80px;
-  height: 60px;
-  border: none;
-  border-radius: 30%;
-  margin: 0 5px;
-  font-size: 1.5rem;
-  color: white;
-  background-color: #505050;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  user-select: none;
+#turnosContainer li::before {
+  content: "🐾";
+  margin-right: 8px;
 }
 
 
 
-button:active {
-  background-color: #787878;
-}
-
-button.operation {
-  background-color: #ff9500;
-}
-
-button.operation:active {
-  background-color: #d77800;
-}
-
-button.clear {
-  background-color: #e40000;
-  color: rgb(250, 249, 249);
-}
-
-button.clear:active {
-  background-color: #8c8c8c;
-}
-
-button.equal {
-  background-color: #ff9500;
-}
-
-button.large {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.historial-titulo {
-  margin-top: 20px;
-  font-weight: 600;
-  font-size: 1.2rem;
-  color: white;
-  text-align: center;
-}
-
-.filtro-operacion {
-  margin-bottom: 10px;
-  padding: 7px;
-  width: 100%;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  user-select: none;
-  text-align: center;
-}
-
-.historial-lista {
-  list-style: none;
-  padding-left: 0;
-  max-height: 160px;
-  overflow-y: auto;
-  border: 1px solid #444;
-  border-radius: 10px;
-  margin-top: 10px;
-  color: white;
-  font-size: 1rem;
-}
-
-.historial-lista li {
-  padding: 6px 10px;
-  border-bottom: 1px solid #444;
-}
-
-.historial-lista li:last-child {
-  border-bottom: none;
-}
-
-.btn-limpiar-historial {
-  margin-top: 10px;
+#calendarioMensual {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 días */
+  gap: 10px;
+  max-width: 700px;
+  margin: 30px auto;
   padding: 10px;
-  width: 100%;
-  border: none;
+  background-color: #fafafa;
   border-radius: 10px;
-  background-color:#e40000;
-  color: white;
-  cursor: pointer;
-  font-size: 1rem;
-  user-select: none;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.btn-limpiar-historial:hover {
-  background-color: #cc0000;
+.dia {
+  height: 100px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 5px;
+  font-size: 14px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
-button.backspace {
-  background-color: #ff9500;
-  color: white;
+.dia span {
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
-button.backspace:active {
-  background-color: #666;
+.turno-ocupado {
+  background-color: #d3d3d3;
+  color: #000;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin-top: 4px;
+  font-size: 12px;
 }
 
+
+footer{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

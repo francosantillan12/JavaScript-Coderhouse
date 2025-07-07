@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <script defer src="../js/turnos.js"></script>
+
+</head>
+<body>
+   <header>
+    <h1> FRANCO SANTILLAN- <br>
+      Turnero Veterinaria 🐶🐱</h1>
+  </header>
+    
+    <div>
+         <li><a href="../index.html">Inicio</a></li>
+    </div>
+   
+    <section id="form-turno">
+      <h2>Agendar nuevo turno</h2>
+      <form id="formularioTurno">
+        <input type="text" id="nombreMascota" placeholder="Nombre de la mascota" required />
+        <input type="date" id="fechaTurno" required />
+        <input type="time" id="horaTurno" required />
+        <button type="submit">Agendar turno</button>
+      </form>
+    </section>
+
+   
+
+    <section id="agendaTurnos">
+    <h2>📅 Agenda de Turnos</h2>
+    
+    <!-- Input para seleccionar mes y año -->
+    <label for="selectorMesAnio">Seleccioná mes y año:</label>
+    <input type="month" id="selectorMesAnio" value="2025-07" />
+
+    <div id="calendarioMensual" class="calendario"></div>
+  </section>
+
+   <section id="lista-turnos">
+      <h2>Turnos agendados</h2>
+      <ul id="turnosContainer">
+        <!-- Turnos renderizados desde JS -->
+      </ul>
+    </section>
+   
+   
+</body>
+    
+
+</html>
