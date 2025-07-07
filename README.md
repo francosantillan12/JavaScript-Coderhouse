@@ -1,31 +1,20 @@
-# JavaScript-Coderhouse
+# 🐾 Veterinaria Don Freud
 
-# 🧮 Mi Calculadora en JavaScript
+Este es un proyecto web desarrollado para simular un sistema de turnos para una veterinaria. Permite agendar turnos, visualizarlos en una agenda mensual tipo calendario y validarlos para que no se repitan.
 
-Este es mi proyecto realizado como parte del curso de JavaScript en CoderHouse
-La aplicación permite realizar operaciones básicas de una calculadora: suma, resta, multiplicación y división, utilizando funciones y estructuras propias del lenguaje.
+## 🚀 Funcionalidades
 
-## ⚙️ Funcionalidades
-- Características
+- Agendado de turnos con nombre de mascota, fecha y hora.
+- Validación de turnos para evitar superposición en día y horario.
+- Restricción de turnos a una franja horaria de 08:00 a 20:00.
+- Visualización mensual en formato de calendario.
+- Guardado persistente en `localStorage`.
+- Diseño adaptable y moderno con HTML, CSS y JavaScript puro.
 
-- Operaciones básicas: suma, resta, multiplicación, división y porcentaje.
+## 🛠 Tecnologías utilizadas
 
-- Historial de cálculos con filtro por tipo de operación.
-
-- Botón para borrar el último dígito ingresado.
-
-- Persistencia del historial y filtro usando localStorage.
-
-- Manejo completo del DOM sin usar alert, prompt ni console.log.
-
-- Respuesta tanto a clicks como a entradas de teclado.
-
-- Estilos modernos con CSS puro.
-
-## 📌 Tecnologías utilizadas
-
-- HTML
-- JavaScript 
-- CSS
-
+- HTML5
+- CSS3
+- JavaScript (sin frameworks)
+- LocalStorage
 
