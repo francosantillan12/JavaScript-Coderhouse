@@ -1,4 +1,4 @@
-# 🐾 Veterinaria Don Freud
+# 🐾 Veterinaria M.Freud
 
 Este es un proyecto web desarrollado para simular un sistema de turnos para una veterinaria. Permite agendar turnos, visualizarlos en una agenda mensual tipo calendario y validarlos para que no se repitan.
 

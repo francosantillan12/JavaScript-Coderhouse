@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let turnos = JSON.parse(localStorage.getItem("turnosVeterinaria")) || [];
 
+  
+
+
   function guardarTurnos() {
     localStorage.setItem("turnosVeterinaria", JSON.stringify(turnos));
   }
@@ -117,4 +120,36 @@ document.addEventListener("DOMContentLoaded", () => {
   mostrarTurnos();
   mostrarCalendarioMensual();
 });
+
+
+
+
+//**********VAINILLA CALENDAR************** */ 
+
+// Destructure the Calendar constructor
+const { Calendar } = window.VanillaCalendarPro;
+// Create a calendar instance and initialize it.
+ const options = { 
+  locale: 'es-AR', // Traduce los textos del calendario al español argentino.
+  type: 'multiple', //Muestra 2 meses al mismo tiempo
+  displayMonthsCount: 2,// Justamente para mostrar esos 2 meses
+  monthsToSwitch: 1,//
+  selectionDatesMode: 'default', // para seleccionar varios dias 
+  disableDatesPast: true, // Impide elegir fechas pasadas.
+  disableDates: ['2025-08-02:2025-08-03','2025-08-09:2025-08-10',
+                '2025-08-16:2025-08-17','2025-08-23:2025-08-24',
+                '2025-08-30:2025-08-31'], //Bloquea fines de semana seleccionados. 
+  timeMinHour: 8, //Define el horario disponible 
+  timeMaxHour: 20,//(08:00 a 20:00).
+  selectionTimeMode: 24,//reloj de 24hs
+  timeControls: 'range',
+  timeStepHour: 1, //Define el intervalo
+  timeStepMinute: 10,//(cada 1 hora y 10 minutos).
+  
+ 
+ };
+const calendar = new Calendar('#calendar', options);
+calendar.init();
+   
+
 
