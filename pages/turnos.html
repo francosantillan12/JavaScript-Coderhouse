@@ -10,15 +10,11 @@
   <!-- FullCalendar CSS -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
 
-  <!-- Vanilla Calendar (si lo querés mantener para otras cosas) -->
-  <link href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/styles/index.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/index.js" defer></script>
-
-  <!-- JS principal -->
-  <script defer src="../js/turnos.js"></script>
-
   <!-- FullCalendar JS -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+  <!-- Tu JS -->
+  <script defer src="../js/turnos.js"></script>
 </head>
 <body>
   <header class="encabezado">
@@ -166,42 +162,18 @@
 
   <!-- Notificaciones -->
   <div id="notificacion" class="notificacion"></div>
+
+  <!-- Modal para turnos del día -->
+  <div id="modalTurnosDia" class="modal-turnos">
+    <div class="modal-turnos-content">
+      <span class="modal-cerrar">&times;</span>
+      <h3>📅 Turnos del día</h3>
+      <div id="listaTurnosDia"></div>
+    </div>
+  </div>
   
   <footer class="pie">
     <p>&copy; 2025 Veterinaria M.Freud | Todos los derechos reservados.</p>
   </footer>
-
-  <!-- Script para inicializar FullCalendar -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const calendarioEl = document.getElementById('calendarioFull');
-      const turnos = JSON.parse(localStorage.getItem("turnosVeterinaria")) || [];
-
-      const eventos = turnos.map(t => ({
-        title: `${t.nombreMascota} - ${t.hora}`,
-        start: t.fecha,
-        allDay: true
-      }));
-
-      const calendario = new FullCalendar.Calendar(calendarioEl, {
-        initialView: 'dayGridMonth',
-        locale: 'es',
-        events: eventos,
-        height: 'auto'
-      });
-
-      calendario.render();
-    });
-  </script>
-
-  <!-- Modal para mostrar turnos del día -->
-<div id="modalTurnosDia" class="modal-turnos">
-  <div class="modal-turnos-content">
-    <span class="modal-cerrar">&times;</span>
-    <h3>📅 Turnos del día</h3>
-    <div id="listaTurnosDia"></div>
-  </div>
-</div>
-
 </body>
 </html>
