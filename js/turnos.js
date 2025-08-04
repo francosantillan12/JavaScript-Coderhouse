@@ -143,6 +143,7 @@ class AppManager {
     this.configurarEventos();
     this.configurarHorarios();
     this.uiManager.actualizarUI();
+    this.bloquearFechasPasadas();
   };
 
   configurarEventos() {
@@ -177,19 +178,39 @@ class AppManager {
   }
 
   actualizarHorariosDisponibles() {
-    const fecha = document.getElementById("fechaTurno").value;
-    const selectHora = document.getElementById("horaTurno");
-    if (!fecha || !selectHora) return;
+  const fechaSeleccionada = document.getElementById("fechaTurno").value.trim();
+  const selectHora = document.getElementById("horaTurno");
+  if (!fechaSeleccionada || !selectHora) return;
 
-    const turnosGuardados = JSON.parse(localStorage.getItem("turnosVeterinaria")) || [];
-    [...selectHora.options].forEach(opt => opt.disabled = false);
+  const turnosGuardados = JSON.parse(localStorage.getItem("turnosVeterinaria")) || [];
 
-    turnosGuardados
-      .filter(t => t.fecha === fecha)
-      .forEach(t => {
-        const opt = [...selectHora.options].find(o => o.value === t.hora);
-        if (opt) opt.disabled = true;
-      });
+  // Restaurar todas las opciones
+  [...selectHora.options].forEach(opt => {
+    if (opt.value !== "") {
+      opt.disabled = false;
+      opt.textContent = opt.value;
+    }
+  });
+
+  // Filtrar SOLO los turnos de esa fecha exacta (string)
+  turnosGuardados
+    .filter(t => t.fecha.trim() === fechaSeleccionada) // 👈 comparación estricta de string
+    .forEach(t => {
+      const opt = [...selectHora.options].find(o => o.value === t.hora);
+      if (opt) {
+        opt.disabled = true;
+        opt.textContent = `${opt.value} (Ocupado)`;
+      }
+    });
+}
+
+
+  bloquearFechasPasadas() {
+    const fechaTurno = document.getElementById("fechaTurno");
+    if (fechaTurno) {
+      const hoy = new Date().toISOString().split('T')[0];
+      fechaTurno.min = hoy;
+    }
   }
 
   procesarFormulario = async () => {
@@ -201,6 +222,15 @@ class AppManager {
 
     if (!nombre || !tipoServicio || !fecha || !hora) {
       alert("Completa todos los campos obligatorios");
+      return;
+    }
+
+    // 🚫 Bloquear fechas pasadas
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fechaSeleccionada = new Date(fecha);
+    if (fechaSeleccionada < hoy) {
+      alert("No se pueden reservar turnos en fechas pasadas.");
       return;
     }
 
@@ -228,7 +258,7 @@ function inicializarCalendarioFull(turnos) {
     locale: 'es',
     events: eventos,
     height: 'auto',
-    dateClick: function(info) {
+    dateClick: function (info) {
       mostrarTurnosDelDia(info.dateStr, turnos);
     }
   });
@@ -261,11 +291,11 @@ function mostrarTurnosDelDia(fechaISO, turnos) {
 }
 
 // Cerrar modal
-document.querySelector(".modal-cerrar").onclick = function() {
+document.querySelector(".modal-cerrar").onclick = function () {
   document.getElementById("modalTurnosDia").style.display = "none";
 };
 
-window.onclick = function(event) {
+window.onclick = function (event) {
   const modal = document.getElementById("modalTurnosDia");
   if (event.target == modal) {
     modal.style.display = "none";
