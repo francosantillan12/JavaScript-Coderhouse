@@ -1,26 +1,32 @@
-
-
 /**************** SECCION "TURNOS" *******************************/
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #b8b6b6;
-  color: #333333;
+  background: #000000;
+  color: #a7a7a7;
   padding: 20px;
   max-width: 100%;
   margin: 0 auto;
+  padding-bottom: 50px; /* Para que no tape el footer fijo */
 }
+
 .navbar ul{
   display: flex;
   gap: 5rem;
   margin-top: 2rem;
   margin-bottom: 3rem;
   justify-content: center;
-
 }
-
+.logo {
+  display: flex;
+  align-items: center; /* Alinea verticalmente imagen y texto */
+  gap: 15px;       /* Espacio entre imagen y texto */
+}
 .logo img{
   width: 100px;
+  height: auto;
 }
+
+
 
 .imagen-portada{
    display: flex;
@@ -30,10 +36,12 @@ body {
 
 .imagen-portada img{
   width: 500px;
+  margin-bottom: 5rem;
 }
 
 h1{
-  text-align: center;
+  color:#2a9d8f;
+  justify-content: center;  
 }
 
 h2{
@@ -53,6 +61,9 @@ h2{
   display: flex;
   flex-direction: column;
   gap: 15px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #formularioTurno input {
@@ -83,8 +94,9 @@ h2{
   background-color: #21867a;
 }
 
-
 #turnosContainer {
+  max-width: 700px;
+  margin: 0 auto 30px auto;
   list-style: none;
   padding: 0;
 }
@@ -107,7 +119,21 @@ h2{
   margin-right: 8px;
 }
 
+/* Botón cancelar turno */
+#turnosContainer button.cancelar {
+  background-color: #e55353;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
 
+#turnosContainer button.cancelar:hover {
+  background-color: #b02a2a;
+}
 
 #calendarioMensual {
   display: grid;
@@ -132,6 +158,12 @@ h2{
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  transition: background-color 0.3s ease;
+}
+
+.dia:hover {
+  background-color: #e0f0ff;
+  cursor: pointer;
 }
 
 .dia span {
@@ -148,9 +180,72 @@ h2{
   font-size: 12px;
 }
 
-
-footer{
+footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+  background-color: #2a9d8f;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  font-weight: 600;
+}
+
+
+
+
+/* --- Responsive --- */
+
+/* Pantallas pequeñas: hasta 600px */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  #formularioTurno {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  #turnosContainer {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  #calendarioMensual {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+    padding: 10px 5px;
+    gap: 6px;
+  }
+
+  .dia {
+    height: 80px;
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  .turno-ocupado {
+    font-size: 10px;
+    padding: 1px 3px;
+    margin-top: 2px;
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+
+/* Pantallas medianas: 601px a 900px */
+@media (max-width: 900px) and (min-width: 601px) {
+  #calendarioMensual {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 100%;
+  }
+
+  .dia {
+    height: 90px;
+  }
 }

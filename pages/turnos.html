@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sistema de Turnos - Veterinaria M.Freud</title>
     <link rel="stylesheet" href="../styles/style.css">
-    <!--******VAINILLA CALENDAR-->
+    <link rel="stylesheet" href="../styles/turnos.css">
+    <!--******VAINILLA CALENDAR-->-->
     <link href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/styles/index.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/index.js" defer></script>
     
@@ -14,52 +15,160 @@
 
 </head>
 <body>
-   <header>
-    <h1> FRANCO SANTILLAN- <br>
-      Turnero Veterinaria 🐶🐱</h1>
-  </header>
-    
-    <div>
-         <li><a href="../index.html">Inicio</a></li>
+   <header class="encabezado">
+    <div class="logo">
+      <img src="../imagenes/logoweb/logoveterinaria.jpeg" alt="Logo veterinaria" />
+      <h1>Veterinaria M.Freud</h1>
     </div>
+  <nav class="navbar">
+    <ul>
+    <li><a href="../index.html">Inicio</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="./turnos.html">Turnos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+  </header>
 
-
-    <section style="display: flex; align-items: start">
-      <div id="calendar"></div>>
-
-      
+  <main class="main-turnos">
+    <!-- Panel de estadísticas -->
+    <section class="stats-panel">
+      <div class="stat-card">
+        <h3>📊 Estadísticas</h3>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number" id="totalTurnos">0</span>
+            <span class="stat-label">Total Turnos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="turnosHoy">0</span>
+            <span class="stat-label">Hoy</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="turnosSemana">0</span>
+            <span class="stat-label">Esta Semana</span>
+          </div>
+        </div>
+      </div>
     </section>
-   
-    <section id="form-turno">
-      <h2>Agendar nuevo turno</h2>
-      <form id="formularioTurno">
-        <input type="text" id="nombreMascota" placeholder="Nombre de la mascota" required />
-        <input type="date" id="fechaTurno" required />
-        <input type="time" id="horaTurno" required />
-        <button type="submit">Agendar turno</button>
-      </form>
+
+    <!-- Formulario mejorado -->
+    <section class="form-section">
+      <div class="form-container">
+        <h2>🐾 Agendar Nuevo Turno</h2>
+        <form id="formularioTurno" class="turno-form">
+          <div class="form-group">
+            <label for="nombreMascota">Nombre de la Mascota *</label>
+            <input type="text" id="nombreMascota" placeholder="Ej: Luna, Max, Toby..." required />
+          </div>
+          
+          <div class="form-group">
+            <label for="tipoServicio">Tipo de Servicio *</label>
+            <select id="tipoServicio" required>
+              <option value="">Seleccionar servicio...</option>
+              <option value="consulta">Consulta General</option>
+              <option value="vacuna">Vacunación</option>
+              <option value="cirugia">Cirugía</option>
+              <option value="emergencia">Emergencia</option>
+              <option value="peluqueria">Peluquería</option>
+              <option value="control">Control</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fechaTurno">Fecha *</label>
+              <input type="date" id="fechaTurno" required />
+            </div>
+            <div class="form-group">
+              <label for="horaTurno">Hora *</label>
+              <select id="horaTurno" required>
+                <option value="">Seleccionar hora</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="observaciones">Observaciones</label>
+            <textarea id="observaciones" placeholder="Detalles adicionales sobre la consulta..."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">📅 Agendar Turno</button>
+            <button type="reset" class="btn-secondary">Limpiar</button>
+          </div>
+        </form>
+        
+        <div class="info-turnos">
+          <p><strong>💡 Información:</strong> Los turnos tienen una duración de 15 minutos. Horarios disponibles de 10:00 a 20:00. No atendemos los domingos.</p>
+        </div>
+      </div>
     </section>
 
-   
+    <!-- Filtros y búsqueda -->
+    <section class="filters-section">
+      <div class="filters-container">
+        <h3>🔍 Filtros y Búsqueda</h3>
+        <div class="filters-grid">
+          <div class="filter-group">
+            <label for="filtroFecha">Filtrar por fecha:</label>
+            <input type="date" id="filtroFecha" />
+          </div>
+          <div class="filter-group">
+            <label for="filtroServicio">Filtrar por servicio:</label>
+            <select id="filtroServicio">
+              <option value="">Todos los servicios</option>
+              <option value="consulta">Consulta General</option>
+              <option value="vacuna">Vacunación</option>
+              <option value="cirugia">Cirugía</option>
+              <option value="emergencia">Emergencia</option>
+              <option value="peluqueria">Peluquería</option>
+              <option value="control">Control</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="buscarMascota">Buscar mascota:</label>
+            <input type="text" id="buscarMascota" placeholder="Nombre de la mascota..." />
+          </div>
+          <div class="filter-group">
+            <button id="limpiarFiltros" class="btn-secondary">Limpiar Filtros</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <!-- <section id="agendaTurnos">
-    <h2>📅 Agenda de Turnos</h2> -->
-    
-    <!-- Input para seleccionar mes y año -->
-    <!-- <label for="selectorMesAnio">Seleccioná mes y año:</label>
-    <input type="month" id="selectorMesAnio" value="2025-07" />
+    <!-- Calendario mejorado -->
+    <section class="calendar-section">
+      <div class="calendar-container">
+        <h3>📅 Vista Mensual</h3>
+        <div class="calendar-controls">
+          <label for="selectorMesAnio">Seleccionar mes y año:</label>
+          <input type="month" id="selectorMesAnio" value="2025-01" />
+        </div>
+        <div id="calendarioMensual" class="calendario-mejorado"></div>
+      </div>
+    </section>
 
-    <div id="calendarioMensual" class="calendario"></div>
-  </section> -->
+    <!-- Lista de turnos mejorada -->
+    <section class="turnos-section">
+      <div class="turnos-container">
+        <h3>📋 Turnos Agendados</h3>
+        <div class="turnos-header">
+          <span class="turnos-count">Total: <span id="contadorTurnos">0</span> turnos</span>
+          <button id="exportarTurnos" class="btn-secondary">📤 Exportar</button>
+        </div>
+        <div class="turnos-list" id="turnosContainer">
+          <!-- Los turnos se cargarán aquí dinámicamente -->
+        </div>
+      </div>
+    </section>
+  </main>
 
-   <!-- <section id="lista-turnos">
-      <h2>Turnos agendados</h2>
-      <ul id="turnosContainer">
-      </ul>
-    </section> -->
-   
-   
+  <!-- Notificaciones -->
+  <div id="notificacion" class="notificacion"></div>
+  
+  <footer class="pie">
+    <p>&copy; 2025 Veterinaria M.Freud | Todos los derechos reservados.</p>
+  </footer>
 </body>
-    
-
 </html>
