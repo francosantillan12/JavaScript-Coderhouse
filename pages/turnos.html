@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Turnos - Veterinaria M.Freud</title>
-    <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="../styles/turnos.css">
-    <!--******VAINILLA CALENDAR-->-->
-    <link href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/styles/index.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/index.js" defer></script>
-    
-    <!--****MI JS**-->
-    <script defer src="../js/turnos.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Turnos - Veterinaria M.Freud</title>
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../styles/turnos.css">
 
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
+  <!-- Vanilla Calendar (si lo querés mantener para otras cosas) -->
+  <link href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/styles/index.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/index.js" defer></script>
+
+  <!-- JS principal -->
+  <script defer src="../js/turnos.js"></script>
+
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 </head>
 <body>
-   <header class="encabezado">
+  <header class="encabezado">
     <div class="logo">
       <img src="../imagenes/logoweb/logoveterinaria.jpeg" alt="Logo veterinaria" />
       <h1>Veterinaria M.Freud</h1>
     </div>
-  <nav class="navbar">
-    <ul>
-    <li><a href="../index.html">Inicio</a></li>
-    <li><a href="#servicios">Servicios</a></li>
-    <li><a href="./turnos.html">Turnos</a></li>
-    <li><a href="#contacto">Contacto</a></li>
-    </ul>
-  </nav>
+    <nav class="navbar">
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="./turnos.html">Turnos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
   </header>
 
   <main class="main-turnos">
@@ -52,7 +58,7 @@
       </div>
     </section>
 
-    <!-- Formulario mejorado -->
+    <!-- Formulario -->
     <section class="form-section">
       <div class="form-container">
         <h2>🐾 Agendar Nuevo Turno</h2>
@@ -137,19 +143,13 @@
       </div>
     </section>
 
-    <!-- Calendario mejorado -->
+    <!-- Nuevo calendario con FullCalendar -->
     <section class="calendar-section">
-      <div class="calendar-container">
-        <h3>📅 Vista Mensual</h3>
-        <div class="calendar-controls">
-          <label for="selectorMesAnio">Seleccionar mes y año:</label>
-          <input type="month" id="selectorMesAnio" value="2025-01" />
-        </div>
-        <div id="calendarioMensual" class="calendario-mejorado"></div>
-      </div>
+      <h3>📅 Vista Mensual</h3>
+      <div id="calendarioFull"></div>
     </section>
 
-    <!-- Lista de turnos mejorada -->
+    <!-- Lista de turnos -->
     <section class="turnos-section">
       <div class="turnos-container">
         <h3>📋 Turnos Agendados</h3>
@@ -170,7 +170,38 @@
   <footer class="pie">
     <p>&copy; 2025 Veterinaria M.Freud | Todos los derechos reservados.</p>
   </footer>
+
+  <!-- Script para inicializar FullCalendar -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarioEl = document.getElementById('calendarioFull');
+      const turnos = JSON.parse(localStorage.getItem("turnosVeterinaria")) || [];
+
+      const eventos = turnos.map(t => ({
+        title: `${t.nombreMascota} - ${t.hora}`,
+        start: t.fecha,
+        allDay: true
+      }));
+
+      const calendario = new FullCalendar.Calendar(calendarioEl, {
+        initialView: 'dayGridMonth',
+        locale: 'es',
+        events: eventos,
+        height: 'auto'
+      });
+
+      calendario.render();
+    });
+  </script>
+
+  <!-- Modal para mostrar turnos del día -->
+<div id="modalTurnosDia" class="modal-turnos">
+  <div class="modal-turnos-content">
+    <span class="modal-cerrar">&times;</span>
+    <h3>📅 Turnos del día</h3>
+    <div id="listaTurnosDia"></div>
+  </div>
+</div>
+
 </body>
 </html>
-
-<!--aaaaa-->

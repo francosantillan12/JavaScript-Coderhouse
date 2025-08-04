@@ -26,8 +26,6 @@ body {
   height: auto;
 }
 
-
-
 .imagen-portada{
    display: flex;
    justify-content: center;
@@ -135,6 +133,7 @@ h2{
   background-color: #b02a2a;
 }
 
+/* CALENDARIO VIEJO (NO SE USARÁ PERO LO DEJO POR SI QUERÉS) */
 #calendarioMensual {
   display: grid;
   grid-template-columns: repeat(7, 1fr); /* 7 días */
@@ -191,12 +190,7 @@ footer {
   font-weight: 600;
 }
 
-
-
-
 /* --- Responsive --- */
-
-/* Pantallas pequeñas: hasta 600px */
 @media (max-width: 600px) {
   body {
     padding: 10px;
@@ -238,7 +232,6 @@ footer {
   }
 }
 
-/* Pantallas medianas: 601px a 900px */
 @media (max-width: 900px) and (min-width: 601px) {
   #calendarioMensual {
     grid-template-columns: repeat(4, 1fr);
@@ -247,5 +240,68 @@ footer {
 
   .dia {
     height: 90px;
+  }
+}
+
+/* ======= ESTILO PARA FULLCALENDAR ======= */
+#calendarioFull {
+  max-width: 900px;
+  margin: 20px auto;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.fc-toolbar-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #2a9d8f;
+}
+
+.fc-daygrid-day-number {
+  font-weight: bold;
+  color: #333;
+}
+
+.fc-col-header-cell {
+  background: #2a9d8f;
+  color: white;
+  font-weight: bold;
+  padding: 5px 0;
+}
+
+.fc-event {
+  background-color: #2a9d8f !important;
+  border: none !important;
+  color: white !important;
+  font-size: 0.85rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.fc-event:hover {
+  background-color: #21867a !important;
+}
+
+.fc-button {
+  background: #2a9d8f !important;
+  border: none !important;
+  color: white !important;
+  padding: 5px 10px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.fc-button:hover {
+  background: #21867a !important;
+}
+
+@media (max-width: 600px) {
+  #calendarioFull {
+    padding: 10px;
+  }
+  .fc-toolbar-title {
+    font-size: 1rem;
   }
 }
